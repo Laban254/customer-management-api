@@ -35,4 +35,4 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
-        ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ansible/hosts.ini ansible/playbooks/initial_setup_django_ec2.yml --private-key /tmp/id_rsa -l webservers
+        ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ansible/inventory/hosts.ini ansible/playbooks/initial_setup_django_ec2.yml --private-key /tmp/id_rsa -l webservers -e "ansible_host=${{ secrets.SERVER_IP }} ansible_user=${{ secrets.ANSIBLE_USER }}"
