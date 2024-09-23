@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'customer_orders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +154,35 @@ GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI')
 # AFRICAS_TALKING
 AFRICAS_TALKING_USERNAME = os.getenv('AFRICAS_TALKING_USERNAME')
 AFRICAS_TALKING_API_KEY = os.getenv('AFRICAS_TALKING_API_KEY')
+
+#drf spectaculr
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Customer and Order API',
+    'DESCRIPTION': 'API for managing customers and orders',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_NO_PAGINATION': True,
+    'SCHEMA_PATH_PREFIX': '/api/',
+    'AUTHENTICATION': [
+        {
+            'TYPE': 'http',
+            'SCHEME': 'bearer',
+            'NAME': 'Bearer Authentication',
+        }
+    ],
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
