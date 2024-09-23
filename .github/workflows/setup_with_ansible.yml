@@ -1,0 +1,38 @@
+name: setup with Ansible
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install Ansible
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible
+
+    - name: Load Environment Variables
+      run: |
+        echo "EC2_PUBLIC_IP=${{ secrets.SERVER_IP }}" >> $GITHUB_ENV
+        echo "ANSIBLE_USER=${{ secrets.ANSIBLE_USER }}" >> $GITHUB_ENV
+
+    - name: Save Private Key
+      run: |
+        echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/id_rsa
+        chmod 600 /tmp/id_rsa
+
+    
+
+    - name: Run Ansible Playbook
+      run: |
+        ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ansible/hosts.ini ansible/playbooks/initial_setup_django_ec2.yml --private-key /tmp/id_rsa -l webservers
