@@ -1,0 +1,90 @@
+# Python specific
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+*.pot
+*.mo
+*.coverage
+*.cover
+*.py,cover
+*.env
+*.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django specific
+*.sqlite3
+db.sqlite3
+/media/
+/staticfiles/
+
+# Secret settings
+.env
+*.env
+
+# Git specific
+*.orig
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+
+# Virtual environment
+.venv
+.env/
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+
+# Logs and other generated files
+*.log
+*.pot
+*.mo
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+.cache
+
+# Migrations
+**/migrations/*
+
+# Pytest cache
+.pytest_cache/
+
+# MySQL dumps
+*.sql
+
+# Other
+local_settings.py
+*.bak
