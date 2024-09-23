@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authentication',
-     'rest_framework',
+    'customer_orders',
+    'rest_framework',
     'rest_framework_simplejwt',
 ]
 
@@ -147,3 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI')
+
+# AFRICAS_TALKING
+AFRICAS_TALKING_USERNAME = os.getenv('AFRICAS_TALKING_USERNAME')
+AFRICAS_TALKING_API_KEY = os.getenv('AFRICAS_TALKING_API_KEY')
