@@ -10,6 +10,12 @@
           - gnupg2
           - lsb-release
 
+    - name: Install CRI-O
+      apt:
+        name:
+          - cri-o
+        state: present
+
     - name: add docker apt key
       become: yes
       apt_key:
