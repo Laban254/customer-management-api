@@ -2,37 +2,61 @@
 - hosts: webservers
   become: true
   tasks:
-    - name: Update apt package index
-      ansible.builtin.apt:
+    - name: Update the package list
+      apt:
+        update_cache: yes
+
+    - name: Install necessary packages for Docker
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        validate_certs: yes  
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        state: present
+
+    - name: Update the package list again
+      apt:
         update_cache: yes
 
     - name: Install Docker
-      ansible.builtin.apt:
-        pkg:
-          - docker.io
-          - python3-venv
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
         state: present
 
-    - name: Start Docker service
-      ansible.builtin.systemd:
-        name: docker
-        state: started
-        enabled: yes
+    - name: Check Docker version
+      command: docker --version
+      register: docker_version
 
-    - name: Create Python virtual environment
-      ansible.builtin.command: python3 -m venv /opt/venv
-      args:
-        creates: /opt/venv
+    - name: Display Docker version
+      debug:
+        msg: "Docker version installed: {{ docker_version.stdout }}"
 
-    - name: Install Docker Compose in virtual environment
-      ansible.builtin.command: /opt/venv/bin/pip install docker-compose
-      args:
-        warn: false
+    - name: Download Docker Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }} "
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'  # Make it executable
 
-    - name: Verify Docker Compose installation
-      ansible.builtin.command: /opt/venv/bin/docker-compose --version
-      register: docker_compose_version
+    - name: Check Docker Compose version
+      command: docker-compose --version
+      register: compose_version
 
     - name: Display Docker Compose version
-      ansible.builtin.debug:
-        msg: "Docker Compose version: {{ docker_compose_version.stdout }}"
+      debug:
+        msg: "Docker Compose version installed: {{ compose_version.stdout }}"
