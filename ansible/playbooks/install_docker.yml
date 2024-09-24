@@ -6,7 +6,7 @@
       apt:
         update_cache: yes
 
-    - name: Ensure correct ownership of the directory
+    - name: Ensure correct ownership of the application directory
       file:
         path: /home/ubuntu/mydjangoapp
         owner: ubuntu
@@ -20,6 +20,14 @@
         dest: /home/ubuntu/mydjangoapp
         force: yes
 
+    - name: Ensure the correct ownership of the cloned repository
+      file:
+        path: /home/ubuntu/mydjangoapp/.git
+        owner: ubuntu
+        group: ubuntu
+        state: directory
+        mode: '0755'
+
     - name: Install Docker
       apt:
         name: docker.io
@@ -31,7 +39,7 @@
         state: started
         enabled: yes
 
-    - name: Add user to the docker group
+    - name: Add user to the Docker group
       user:
         name: ubuntu
         groups: docker
@@ -44,8 +52,8 @@
 
     - name: Install Docker Compose
       shell: |
-        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
+        curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
 
     - name: Verify Docker Compose installation
       command: docker-compose --version
