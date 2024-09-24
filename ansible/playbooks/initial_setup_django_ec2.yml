@@ -29,6 +29,9 @@
         dest: /home/ubuntu/mydjangoapp
         force: yes
 
+    - name: Change permissions for the .git directory
+      command: chmod -R 755 /home/ubuntu/mydjangoapp/.git/
+
     - name: Ensure the app directory exists
       file:
         path: /home/ubuntu/mydjangoapp
