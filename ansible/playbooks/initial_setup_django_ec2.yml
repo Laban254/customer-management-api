@@ -1,52 +1,40 @@
 - hosts: webservers
   become: true
   tasks:
-    - name: Update apt package index
+    - name: Install required system packages
       apt:
-        update_cache: yes
-        force_apt_get: yes
-
-    - name: Install prerequisite packages
-      apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
+        pkg: apt-transport-https,ca-certificates,curl,software-properties-common
         state: present
-
-    - name: Add Docker's official GPG key
-      command: >
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | 
-        gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-      args:
-        warn: false
-
-    - name: Set up the Docker repository
-      command: >
-        echo "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] 
-        https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | 
-        tee /etc/apt/sources.list.d/docker.list > /dev/null
-      args:
-        warn: false
-
-    - name: Update apt package index again
-      apt:
         update_cache: yes
 
-    - name: Install Docker Engine
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
         state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+        state: present
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
 
     - name: Start Docker service
-      systemd:
+      service:
         name: docker
         state: started
-        enabled: true
+        enabled: yes
 
     - name: Verify Docker installation
       command: docker run hello-world
