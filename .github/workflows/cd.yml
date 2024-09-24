@@ -23,15 +23,15 @@ jobs:
 
       - name: Save Private Key
         run: |
-          echo "${{ secrets.ANSIBLE_PRIVATE_KEY }}" > /tmp/id_rsa.pem
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/id_rsa.pem
           chmod 600 /tmp/id_rsa.pem
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_PUBLIC_IP }}
+          host: ${{ secrets.SERVER_IP }}
           username: ubuntu
-          key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             git config --global --add safe.directory /home/ubuntu/mydjangoapp
             cd /home/ubuntu/mydjangoapp
