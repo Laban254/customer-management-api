@@ -11,24 +11,19 @@
         state: present
         update_cache: yes
 
-    - name: Create directory for Docker keyrings if not exists -
+    - name: Create directory for Docker keyrings if not exists
       ansible.builtin.file:
         path: /etc/apt/keyrings
         state: directory
         mode: '0755'
 
     - name: Download Docker's official GPG key
-      command: curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker-archive-keyring.gpg
-      args:
-        creates: /etc/apt/keyrings/docker-archive-keyring.gpg
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker-archive-keyring.gpg
 
-    - name: Convert GPG key to dearmor
-      command: gpg --dearmor --yes -o /etc/apt/keyrings/docker-archive-keyring.gpg
-      args:
-        creates: /etc/apt/keyrings/docker-archive-keyring.gpg
-
-    - name: Update permissions for Docker GPG key
-      file:
+    - name: Ensure Docker GPG key permissions are correct
+      ansible.builtin.file:
         path: /etc/apt/keyrings/docker-archive-keyring.gpg
         mode: '0644'
 
