@@ -1,4 +1,4 @@
-name: setup with Ansible
+name: initial setup
 
 on:
   workflow_dispatch: 
