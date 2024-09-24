@@ -35,9 +35,15 @@ jobs:
           script: |
             git config --global --add safe.directory /home/ubuntu/mydjangoapp
             cd /home/ubuntu/mydjangoapp
-            git add .
             git stash -u  
             git pull origin deploy
             docker-compose up -d --build
             docker-compose restart web
+            if git diff --quiet HEAD~1 nginx/nginx.conf; then
+              echo "Nginx configuration not modified. No need to restart."
+            else
+              echo "Nginx configuration modified. Restarting Nginx..."
+              sudo systemctl restart nginx
+            fi
+            
             echo "Deployment completed successfully."
