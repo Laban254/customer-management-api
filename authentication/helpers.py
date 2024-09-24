@@ -7,7 +7,7 @@ def authenticate_or_create_user(email, user_info):
     Args:
         email (str): The email address of the user.
         user_info (dict): A dictionary containing user information from Google, 
-                          including the user's Google ID and names.
+                          including the user's Google ID and names
 
     Returns:
         User: An instance of the User model, either existing or newly created.
