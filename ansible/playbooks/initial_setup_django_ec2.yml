@@ -80,7 +80,7 @@
         name: gunicorn
         state: restarted
 
-    - name: Restart Gunicorn
+    - name: Reload Gunicorn
       systemd:
         name: gunicorn
         state: reloaded
