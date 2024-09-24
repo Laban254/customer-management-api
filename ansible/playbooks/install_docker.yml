@@ -1,18 +1,31 @@
-- hosts: webservers
-  become: true
+---
+- hosts: webservers 
+  become: yes  
   tasks:
-    - name: Update apt package index
-      ansible.builtin.apt:
+    - name: Update package list
+      apt:
         update_cache: yes
 
     - name: Install Docker
-      ansible.builtin.apt:
-        pkg:
-          - docker.io
+      apt:
+        name: docker.io
         state: present
 
-    - name: Start Docker service
-      ansible.builtin.systemd:
+    - name: Start and enable Docker service
+      systemd:
         name: docker
         state: started
         enabled: yes
+
+    - name: Install Docker Compose
+      shell: |
+        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
+    - name: Verify Docker Compose installation
+      command: docker-compose --version
+      register: compose_version
+
+    - name: Display Docker Compose version
+      debug:
+        msg: "Docker Compose version installed: {{ compose_version.stdout }}"
