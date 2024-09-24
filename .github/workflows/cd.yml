@@ -33,6 +33,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/mydjangoapp
             git config --global --add safe.directory /home/ubuntu/mydjangoapp
             cd /home/ubuntu/mydjangoapp
             git stash -u  
