@@ -7,6 +7,12 @@ on:
     paths-ignore:
       - "README.md"
       - ".github/workflows/**"
+  pull_request:
+    branches:
+      - deploy
+    paths-ignore:
+      - "README.md"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 jobs:
