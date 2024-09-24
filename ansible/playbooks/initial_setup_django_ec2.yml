@@ -29,8 +29,8 @@
         dest: /home/ubuntu/mydjangoapp
         force: yes
 
-    - name: Change permissions for the .git directory
-      command: chmod -R 755 /home/ubuntu/mydjangoapp/.git/
+    - name: Change permissions for the app directory
+      command: chmod -R 777 /home/ubuntu/mydjangoapp
 
     - name: Ensure the app directory exists
       file:
@@ -61,7 +61,7 @@
           [Service]
           User=ubuntu
           Group=www-data
-          WorkingDirectory=/home/ubuntu/mydjangoapp/customer-management-api
+          WorkingDirectory=/home/ubuntu/mydjangoapp
           ExecStart=/home/ubuntu/mydjangoapp/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 customer_orders_service.wsgi:application
           StandardOutput=journal
           StandardError=journal
