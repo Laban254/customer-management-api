@@ -75,6 +75,11 @@
         enabled: true
         state: started
 
+    - name: Restart Gunicorn
+      systemd:
+        name: gunicorn
+        state: restarted
+
     - name: Configure Nginx
       copy:
         dest: /etc/nginx/sites-available/mydjangoapp
@@ -109,11 +114,6 @@
         src: /etc/nginx/sites-available/mydjangoapp
         dest: /etc/nginx/sites-enabled/mydjangoapp
         state: link
-
-    - name: Restart Gunicorn
-      systemd:
-        name: gunicorn
-        state: restarted
 
     - name: Restart Nginx
       systemd:
