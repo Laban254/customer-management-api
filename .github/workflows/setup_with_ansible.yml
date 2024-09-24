@@ -35,4 +35,4 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
-        ExecStart=/home/ubuntu/mydjangoapp/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 customer_orders_service.wsgi:application
+         ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ansible/hosts.ini ansible/initial_setup_django_ec2.yml --private-key /tmp/id_rsa -l webservers

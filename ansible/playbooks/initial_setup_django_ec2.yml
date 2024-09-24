@@ -58,7 +58,7 @@
           [Service]
           User=ubuntu
           Group=www-data
-          WorkingDirectory=/home/ubuntu/mydjangoapp/customer_orders_service
+          WorkingDirectory=/home/ubuntu/mydjangoapp/customer-management-api
           ExecStart=/home/ubuntu/mydjangoapp/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 customer_orders_service.wsgi:application
           StandardOutput=journal
           StandardError=journal
