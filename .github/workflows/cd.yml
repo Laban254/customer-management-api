@@ -38,8 +38,6 @@ jobs:
             git add .
             git stash -u  
             git pull origin deploy
-            source venv/bin/activate
-            pip install -r requirements.txt --no-deps --use-deprecated=legacy-resolver
-            python manage.py migrate
-            python manage.py collectstatic --noinput
-            sudo systemctl restart gunicorn
+            docker-compose up -d --build
+            docker-compose restart web
+            echo "Deployment completed successfully."
