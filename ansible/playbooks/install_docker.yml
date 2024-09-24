@@ -63,3 +63,19 @@
     - name: Display Docker Compose version
       debug:
         msg: "Docker Compose version installed: {{ compose_version.stdout }}"
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable Nginx service
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Ensure Nginx is running
+      systemd:
+        name: nginx
+        state: started
