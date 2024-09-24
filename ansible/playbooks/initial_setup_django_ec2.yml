@@ -1,46 +1,18 @@
-
-- name: Install Docker on Ubuntu
-  hosts: webservers
-  become: yes
-
+- hosts: webservers
+  become: true
   tasks:
-    - name: Update package lists
-      apt: update_cache=yes
-
-    - name: Install required packages
-      apt:
-        pkg:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-        state: present
-
-    - name: Add Docker repository GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker repository
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
-        state: present
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
 
     - name: Install Docker
-      apt:
-        pkg: docker.io
+      ansible.builtin.apt:
+        pkg:
+          - docker.io
         state: present
 
     - name: Start Docker service
-      service:
+      ansible.builtin.systemd:
         name: docker
         state: started
-
-    - name: Verify Docker installation
-      command: docker --version
-      register: docker_version
-      changed_when: false
-
-    - name: Print Docker version
-      debug:
-        msg: "Docker version: {{ docker_version.stdout }}"
+        enabled: yes
