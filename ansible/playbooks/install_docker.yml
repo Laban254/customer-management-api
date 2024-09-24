@@ -10,6 +10,7 @@
       ansible.builtin.apt:
         pkg:
           - docker.io
+          - python3-venv
         state: present
 
     - name: Start Docker service
@@ -18,21 +19,18 @@
         state: started
         enabled: yes
 
-    - name: Install required packages for Docker Compose
-      ansible.builtin.apt:
-        pkg:
-          - curl
-          - python3-pip
-        state: present
+    - name: Create Python virtual environment
+      ansible.builtin.command: python3 -m venv /opt/venv
+      args:
+        creates: /opt/venv
 
-    - name: Install Docker Compose
-      ansible.builtin.command: >
-        pip3 install docker-compose
+    - name: Install Docker Compose in virtual environment
+      ansible.builtin.command: /opt/venv/bin/pip install docker-compose
       args:
         warn: false
 
     - name: Verify Docker Compose installation
-      ansible.builtin.command: docker-compose --version
+      ansible.builtin.command: /opt/venv/bin/docker-compose --version
       register: docker_compose_version
 
     - name: Display Docker Compose version
