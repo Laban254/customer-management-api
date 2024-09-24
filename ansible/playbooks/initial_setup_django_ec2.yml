@@ -83,7 +83,7 @@
     - name: Restart Gunicorn
       systemd:
         name: gunicorn
-        state: reload
+        state: reloaded
 
     - name: Configure Nginx
       copy:
