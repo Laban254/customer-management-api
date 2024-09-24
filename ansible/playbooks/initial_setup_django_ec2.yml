@@ -15,16 +15,27 @@
           - software-properties-common
         state: present
 
-    - name: Add Docker's official GPG key
+    - name: Create directory for Docker GPG key
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download and add Docker's GPG key
       command: >
-        curl -4fsSL https://download.docker.com/linux/ubuntu/gpg | 
-        gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | 
+        gpg --dearmor --yes -o /etc/apt/keyrings/docker-archive-keyring.gpg
       args:
-        warn: false
+        creates: /etc/apt/keyrings/docker-archive-keyring.gpg
+
+    - name: Update permissions for Docker GPG key
+      file:
+        path: /etc/apt/keyrings/docker-archive-keyring.gpg
+        mode: '0644'
 
     - name: Set up the Docker repository
       command: >
-        echo "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] 
+        echo "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker-archive-keyring.gpg] 
         https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | 
         tee /etc/apt/sources.list.d/docker.list > /dev/null
       args:
