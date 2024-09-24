@@ -6,6 +6,12 @@
       apt:
         update_cache: yes
 
+    - name: Clone the Django app from GitHub
+      git:
+        repo: "https://github.com/Laban254/customer-management-api"
+        dest: /home/ubuntu/mydjangoapp
+        force: yes
+
     - name: Install Docker
       apt:
         name: docker.io
