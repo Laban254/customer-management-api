@@ -80,6 +80,11 @@
         name: gunicorn
         state: restarted
 
+    - name: Restart Gunicorn
+      systemd:
+        name: gunicorn
+        state: reload
+
     - name: Configure Nginx
       copy:
         dest: /etc/nginx/sites-available/mydjangoapp
