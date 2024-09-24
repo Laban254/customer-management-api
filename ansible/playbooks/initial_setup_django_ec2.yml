@@ -1,41 +1,35 @@
 - hosts: webservers
   become: true
   tasks:
-    - name: Install required system packages
-      apt:
-        pkg: apt-transport-https,ca-certificates,curl,software-properties-common
-        state: present
-        update_cache: yes
+    - name: Install apt-transport-https
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - lsb-release
+          - gnupg
+        state: latest
+        update_cache: true
 
-    - name: Manually download Docker GPG key
-      command: >
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-      args:
-        creates: /usr/share/keyrings/docker-archive-keyring.gpg
-
-    - name: Add Docker repository
-      apt_repository:
-        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - name: Add signing key
+      ansible.builtin.apt_key:
+        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
         state: present
-        update_cache: yes
+
+    - name: Add repository into sources list
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
 
     - name: Install Docker
-      apt:
-        name: docker-ce
-        state: present
-        update_cache: yes
-
-    - name: Install Docker Compose
-      get_url:
-        url: https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
-        dest: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
-
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: latest
+        update_cache: true
 
     - name: Verify Docker installation
       command: docker run hello-world
