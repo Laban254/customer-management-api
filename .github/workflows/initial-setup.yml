@@ -35,4 +35,4 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
-         ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ansible/inventory/hosts.ini ansible/playbooks/install_docker.yml --private-key /tmp/id_rsa -l webservers
+         ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ansible/inventory/hosts.ini ansible/playbooks/initialSetup.yml --private-key /tmp/id_rsa -l webservers
