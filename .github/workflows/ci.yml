@@ -51,9 +51,17 @@ jobs:
             sleep 2
           done
 
+      - name: Run migrations
+        run: |
+          python manage.py migrate
+
       - name: Test with pytest
         env:
-          DATABASE_URL: 'postgres://postgres:postgres@localhost:5432/postgres'
+          DATABASE_NAME: postgres
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
           AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }} # Set as environment variable
           AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }} # Set as environment variable
         run: |
