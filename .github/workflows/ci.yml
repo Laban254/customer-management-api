@@ -60,4 +60,4 @@ jobs:
         DATABASE_HOST: localhost  
         DATABASE_PORT: 5432
       run: |
-        pytest
+        pytest  --disable-warnings
