@@ -79,3 +79,19 @@ def test_get_customer_list_unauthenticated(api_request_factory):
     response = CustomerListCreateView.as_view()(request)
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+def test_create_customer_with_long_input(mock_user, api_request_factory):
+    """Test creating a customer with extremely long input values."""
+    url = reverse('customer-list-create')
+    long_name = 'A' * 256 
+    request = api_request_factory.post(url, {
+        'name': long_name,
+        'code': '123456',
+        'phone_number': '+254796444444',
+    })
+
+    force_authenticate(request, user=mock_user)
+
+    response = CustomerListCreateView.as_view()(request)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST 
