@@ -58,7 +58,7 @@ def test_create_order_for_authenticated_user(mock_send_sms, mock_user, api_reque
 ])
 def test_access_order_view_without_authentication(mock_user, api_request_factory, authenticated, expected_status):
     """Test access to the order view without authentication."""
-    url = reverse('order-list-create')  # Update to match your actual URL name
+    url = reverse('order-list-create') 
 
     request = api_request_factory.get(url)
 
@@ -68,3 +68,27 @@ def test_access_order_view_without_authentication(mock_user, api_request_factory
     response = OrderListCreateView.as_view()(request)
 
     assert response.status_code == expected_status
+
+def test_get_order_list_authenticated(mock_user, sample_customer, api_request_factory):
+    """Test getting the order list for authenticated users."""
+    url = reverse('order-list-create')
+    
+    request = api_request_factory.get(url)
+    force_authenticate(request, user=mock_user)
+    print("Sample Customer:", sample_customer)
+
+    order = Order.objects.create(item='Test Item', amount=100, customer=sample_customer, user=mock_user)
+
+    response = OrderListCreateView.as_view()(request)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) > 0
+
+def test_get_order_list_unauthenticated(api_request_factory):
+    """Test getting the order list for unauthenticated users."""
+    url = reverse('order-list-create')
+    request = api_request_factory.get(url)
+
+    response = OrderListCreateView.as_view()(request)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
