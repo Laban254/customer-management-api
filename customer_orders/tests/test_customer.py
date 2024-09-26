@@ -57,3 +57,25 @@ def test_access_view_without_authentication(mock_user, api_request_factory, auth
 
     print(expected_status)
     assert response.status_code == expected_status
+
+def test_get_customer_list_authenticated(mock_user, api_request_factory):
+    """Test getting the customer list for authenticated users."""
+    url = reverse('customer-list-create')
+    request = api_request_factory.get(url)
+    force_authenticate(request, user=mock_user)
+
+    Customer.objects.create(name='Test Customer', code='123', phone_number='+254796111111', user=mock_user)
+
+    response = CustomerListCreateView.as_view()(request)
+    
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) > 0  
+
+def test_get_customer_list_unauthenticated(api_request_factory):
+    """Test getting the customer list for unauthenticated users."""
+    url = reverse('customer-list-create')
+    request = api_request_factory.get(url)
+
+    response = CustomerListCreateView.as_view()(request)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
