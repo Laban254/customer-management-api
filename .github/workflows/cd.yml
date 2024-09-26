@@ -1,45 +1,64 @@
-name: CD
+name: CI
 
 on:
-  push:
-    branches: 
-      - deploy
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths-ignore:
       - "README.md"
       - ".github/workflows/**"
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
+    env:
+      AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
+      AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
+      DATABASE_NAME: postgres
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: localhost  
+      DATABASE_PORT: 5432
+
+    services:
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
 
-      - name: Save Private Key
-        run: |
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/id_rsa.pem
-          chmod 600 /tmp/id_rsa.pem
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            sudo chown -R ubuntu:ubuntu /home/ubuntu/mydjangoapp
-            git config --global --add safe.directory /home/ubuntu/mydjangoapp
-            cd /home/ubuntu/mydjangoapp
-            git stash -u  
-            git pull origin deploy
-            docker-compose down
-            docker-compose build --no-cache
-            docker-compose up -d
-            docker-compose restart web
-            echo "Deployment completed successfully."
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until pg_isready -h localhost -p 5432 -U postgres; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 2
+        done
+
+    - name: Make and apply migrations
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate
+
+    - name: Run pytest tests
+      run: |
+        pytest -v --maxfail=1 --disable-warnings
