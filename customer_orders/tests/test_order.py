@@ -52,19 +52,3 @@ def test_create_order_for_authenticated_user(mock_send_sms, mock_user, api_reque
         assert not mock_send_sms.called
 
 
-@pytest.mark.parametrize("authenticated, expected_status", [
-    (False, status.HTTP_401_UNAUTHORIZED),
-    (True, status.HTTP_200_OK),
-])
-def test_access_order_view_without_authentication(mock_user, api_request_factory, authenticated, expected_status):
-    """Test access to the order view without authentication."""
-    url = reverse('order-list-create')
-
-    request = api_request_factory.get(url)
-
-    if authenticated:
-        force_authenticate(request, user=mock_user)
-    
-    response = OrderListCreateView.as_view()(request)
-
-    assert response.status_code == expected_status

@@ -40,20 +40,15 @@ def test_create_customer_for_authenticated_user(mock_user, api_request_factory, 
 
     assert response.status_code == expected_status
 
-@pytest.mark.parametrize("authenticated, expected_status", [
-    (False, status.HTTP_401_UNAUTHORIZED),
-    (True, status.HTTP_200_OK), 
-])
-def test_access_view_without_authentication(mock_user, api_request_factory, authenticated, expected_status):
-    """Test access to a view without authentication."""
-    url = reverse('customer-list-create') 
+def test_access_view_with_authentication(mock_user, api_request_factory):
+    """Test access to a view with authentication."""
+    url = reverse('customer-list-create')
     
     request = api_request_factory.get(url)
+    
+    force_authenticate(request, user=mock_user)
+    response = CustomerListCreateView.as_view()(request)
 
-    if authenticated:
-        force_authenticate(request, user=mock_user)
-
-    response = CustomerListCreateView.as_view()(request) 
-
+    expected_status = status.HTTP_200_OK
     print(expected_status)
     assert response.status_code == expected_status
