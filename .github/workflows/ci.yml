@@ -40,25 +40,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up PostgreSQL
+    - name: Wait for PostgreSQL to be ready
       run: |
-        sudo service postgresql start
-        psql -U postgres -c "CREATE DATABASE test_db;"
-        psql -U postgres -c "CREATE USER test_user WITH PASSWORD 'test_password';"
-        psql -U postgres -c "ALTER ROLE test_user SET client_encoding TO 'utf8';"
-        psql -U postgres -c "ALTER ROLE test_user SET default_transaction_isolation TO 'read committed';"
-        psql -U postgres -c "ALTER ROLE test_user SET timezone TO 'UTC';"
-        psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE test_db TO test_user;"
+        until pg_isready -h localhost -p 5432; do
+          echo "Waiting for PostgreSQL to start...";
+          sleep 5;
+        done
 
     - name: Apply migrations
       env:
         DJANGO_SETTINGS_MODULE: customer_orders_service.settings
       run: |
-        python manage.py migrate --no-input  # Apply all migrations
-
-    - name: Check applied migrations
-      run: |
-        python manage.py showmigrations  # Verifying migrations are applied
+        python manage.py migrate --no-input
 
     - name: Run tests
       run: |
