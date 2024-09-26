@@ -40,15 +40,17 @@ def test_create_customer_for_authenticated_user(mock_user, api_request_factory, 
 
     assert response.status_code == expected_status
 
-def test_access_view_with_authentication(mock_user, api_request_factory):
-    """Test access to a view with authentication."""
-    url = reverse('customer-list-create')
+def test_access_view_without_authentication(api_request_factory):
+    """Test access to a view without authentication."""
+    url = reverse('customer-list-create') 
     
+    # Create a GET request without authentication
     request = api_request_factory.get(url)
-    
-    force_authenticate(request, user=mock_user)
+
+    # Call the view directly
     response = CustomerListCreateView.as_view()(request)
 
-    expected_status = status.HTTP_200_OK
+    # Expected status should be 401 UNAUTHORIZED
+    expected_status = status.HTTP_401_UNAUTHORIZED
     print(expected_status)
     assert response.status_code == expected_status
