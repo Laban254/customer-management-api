@@ -46,6 +46,10 @@ jobs:
           echo "Waiting for PostgreSQL to start...";
           sleep 5;
         done
+    - name: Debug Environment Variables
+      run: |
+        echo "Username: ${{ secrets.AFRICAS_TALKING_USERNAME }}"
+        echo "API Key: ${{ secrets.AFRICAS_TALKING_API_KEY }}"
 
     - name: Apply migrations
       env:
