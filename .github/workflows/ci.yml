@@ -13,6 +13,11 @@ jobs:
     env:
       AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
       AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
+      DATABASE_NAME: postgres
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: localhost  
+      DATABASE_PORT: 5432
 
     services:
       db:
@@ -42,22 +47,11 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Run migrations
-      env:
-        DATABASE_NAME: postgres
-        DATABASE_USER: postgres
-        DATABASE_PASSWORD: postgres
-        DATABASE_HOST: localhost  
-        DATABASE_PORT: 5432
+    - name: Make and apply migrations
       run: |
+        python manage.py makemigrations
         python manage.py migrate
 
-    - name: Run tests
-      env:
-        DATABASE_NAME: postgres
-        DATABASE_USER: postgres
-        DATABASE_PASSWORD: postgres
-        DATABASE_HOST: localhost  
-        DATABASE_PORT: 5432
+    - name: Run pytest tests
       run: |
-        python manage.py test
+        pytest --maxfail=1 --disable-warnings
