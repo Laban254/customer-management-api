@@ -42,6 +42,10 @@ jobs:
       run: |
         pip install -r requirements.txt
 
+    - name: Create migrations
+      run: |
+        python manage.py makemigrations
+
     - name: Run migrations
       env:
         DATABASE_NAME: postgres
@@ -60,4 +64,4 @@ jobs:
         DATABASE_HOST: localhost  
         DATABASE_PORT: 5432
       run: |
-        python manage.py test
+        pytest -v --disable-warnings
