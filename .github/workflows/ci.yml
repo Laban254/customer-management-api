@@ -42,6 +42,22 @@ jobs:
       run: |
         pip install -r requirements.txt
 
+    - name: Drop the test database (if it exists)
+      run: |
+        psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS postgres;"
+      env:
+        PGPASSWORD: postgres
+
+    - name: Run makemigrations
+      run: |
+        python manage.py makemigrations
+      env:
+        DATABASE_NAME: postgres
+        DATABASE_USER: postgres
+        DATABASE_PASSWORD: postgres
+        DATABASE_HOST: localhost  
+        DATABASE_PORT: 5432
+
     - name: Run migrations
       env:
         DATABASE_NAME: postgres
