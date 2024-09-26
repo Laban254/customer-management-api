@@ -1,4 +1,3 @@
-
 name: CI
 
 on:
@@ -17,8 +16,6 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
-          AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test_db
@@ -57,5 +54,9 @@ jobs:
         python manage.py migrate --no-input
 
     - name: Run tests
+      env:
+        DJANGO_SETTINGS_MODULE: customer_orders_service.settings
+        AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
+        AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
       run: |
         pytest --maxfail=1 --disable-warnings
