@@ -28,7 +28,6 @@ SECRET_KEY = 'django-insecure-ex2@pmn$ot7edgieos$lsou$wzfmai4hlh)0pfrwll4ujxx)_f
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set DEBUG based on the environment variable
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
 # Set ALLOWED_HOSTS
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
@@ -63,7 +62,7 @@ ROOT_URLCONF = 'customer_orders_service.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,14 +90,14 @@ WSGI_APPLICATION = 'customer_orders_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        'NAME': os.getenv('DATABASE_NAME', 'postgres'), 
+        'USER': os.getenv('DATABASE_USER', 'postgres'), 
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': os.getenv('DATABASE_PORT', '5432'), 
         'OPTIONS': {
-            'sslmode': os.getenv('DATABASE_SSLMODE'),
-        }
+            'sslmode': os.getenv('DATABASE_SSLMODE', 'prefer'), 
+        },
     }
 }
 
