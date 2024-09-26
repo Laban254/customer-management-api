@@ -1,79 +1,49 @@
 name: CI
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths-ignore:
-      - "README.md"
-      - ".github/workflows/**"
+on: [push]
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
-    env:
-      AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
-      AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
 
     services:
-      db:
-        image: postgres:latest
+      postgres:
+        image: postgres:11
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db  # Specify a test database here
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+        if: steps.cache.outputs.cache-hit != 'true'
 
-    - name: Drop the test database (if it exists)
-      run: |
-        psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS test_db;"
-      env:
-        PGPASSWORD: postgres
-
-    - name: Run makemigrations
-      run: |
-        python manage.py makemigrations
-      env:
-        DATABASE_NAME: test_db  # Use test_db for the database name
-        DATABASE_USER: postgres
-        DATABASE_PASSWORD: postgres
-        DATABASE_HOST: localhost  
-        DATABASE_PORT: 5432
-
-    - name: Run migrations
-      env:
-        DATABASE_NAME: test_db  # Use test_db for the database name
-        DATABASE_USER: postgres
-        DATABASE_PASSWORD: postgres
-        DATABASE_HOST: localhost  
-        DATABASE_PORT: 5432
-      run: |
-        python manage.py migrate
-
-    - name: Run tests
-      env:
-        DATABASE_NAME: test_db  # Use test_db for the database name
-        DATABASE_USER: postgres
-        DATABASE_PASSWORD: postgres
-        DATABASE_HOST: localhost  
-        DATABASE_PORT: 5432
-      run: |
-        pytest
+      - name: Test with black
+        run: |
+          python -m black --check .
+      - name: Test with pytest
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+        run: |
+          python -m pytest
