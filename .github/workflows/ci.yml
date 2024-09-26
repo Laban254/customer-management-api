@@ -47,11 +47,22 @@ jobs:
       run: |
         pip install -r requirements.txt
 
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until pg_isready -h localhost -p 5432 -U postgres; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 2
+        done
+
     - name: Make and apply migrations
       run: |
         python manage.py makemigrations
         python manage.py migrate
 
+    - name: Apply migrations to test database
+      run: |
+        python manage.py migrate --database=test
+
     - name: Run pytest tests
       run: |
-        pytest --maxfail=1 --disable-warnings
+        pytest -v --reuse-db --maxfail=1 --disable-warnings
