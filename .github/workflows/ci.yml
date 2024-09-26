@@ -56,9 +56,8 @@ jobs:
 
     - name: Make and apply migrations
       run: |
-        python manage.py makemigrations
-        python manage.py migrate
-
+        python manage.py migrate --no-input
+        
     - name: Run pytest tests
       run: |
-        pytest -v --reuse-db --maxfail=1 --disable-warnings
+        pytest -v --maxfail=1 --disable-warnings
