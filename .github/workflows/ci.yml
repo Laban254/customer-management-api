@@ -13,7 +13,8 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-        ports: ['5432:5432']
+        ports:
+          - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
@@ -39,12 +40,21 @@ jobs:
           python -m pip install -r requirements.txt
         if: steps.cache.outputs.cache-hit != 'true'
 
-      # Mocking Africa's Talking API calls during tests
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h localhost -p 5432; then
+              echo "PostgreSQL is ready!"
+              break
+            fi
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
       - name: Test with pytest
         env:
-          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:5432/postgres'
           AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }} # Set as environment variable
           AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }} # Set as environment variable
         run: |
-          # Mock the africastalking.initialize function in tests
           python -m pytest --disable-warnings
