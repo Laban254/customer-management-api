@@ -1,31 +1,24 @@
-name: CI
+name: Django CI
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    types: [opened, synchronize, reopened]
-    paths-ignore:
-      - "README.md"
-      - ".github/workflows/**"
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
-      AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
-      DATABASE_NAME: postgres
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_HOST: localhost  
-      DATABASE_PORT: 5432
 
     services:
-      db:
-        image: postgres:latest
+      postgres:
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
+          POSTGRES_DB: test_db
         ports:
           - 5432:5432
         options: >-
@@ -35,29 +28,38 @@ jobs:
           --health-retries 5
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.8'
 
     - name: Install dependencies
       run: |
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Wait for PostgreSQL to be ready
+    - name: Set up PostgreSQL
       run: |
-        until pg_isready -h localhost -p 5432 -U postgres; do
-          echo "Waiting for PostgreSQL to be ready..."
-          sleep 2
-        done
+        sudo service postgresql start
+        psql -U postgres -c "CREATE DATABASE test_db;"
+        psql -U postgres -c "CREATE USER test_user WITH PASSWORD 'test_password';"
+        psql -U postgres -c "ALTER ROLE test_user SET client_encoding TO 'utf8';"
+        psql -U postgres -c "ALTER ROLE test_user SET default_transaction_isolation TO 'read committed';"
+        psql -U postgres -c "ALTER ROLE test_user SET timezone TO 'UTC';"
+        psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE test_db TO test_user;"
 
-    - name: Make and apply migrations
+    - name: Apply migrations
+      env:
+        DJANGO_SETTINGS_MODULE: customer_orders_service.settings
       run: |
-        python manage.py migrate --no-input
-        
-    - name: Run pytest tests
+        python manage.py migrate --no-input  # Apply all migrations
+
+    - name: Check applied migrations
       run: |
-        pytest -v --maxfail=1 --disable-warnings
+        python manage.py showmigrations  # Verifying migrations are applied
+
+    - name: Run tests
+      run: |
+        pytest --maxfail=1 --disable-warnings
