@@ -18,7 +18,6 @@ class CustomerListCreateView(generics.ListCreateAPIView):
         """Save the new customer instance with the authenticated user."""
         serializer.save(user=self.request.user)
 
-# Order List and Create View
 class OrderListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer

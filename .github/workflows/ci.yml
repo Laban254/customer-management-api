@@ -13,6 +13,8 @@ jobs:
     env:
       AFRICAS_TALKING_USERNAME: ${{ secrets.AFRICAS_TALKING_USERNAME }}
       AFRICAS_TALKING_API_KEY: ${{ secrets.AFRICAS_TALKING_API_KEY }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
     services:
       db:
@@ -34,13 +36,18 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.8'
 
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+        pip install pytest pytest-cov
+
+    - name: Create migrations
+      run: |
+        python manage.py makemigrations
 
     - name: Run migrations
       env:
@@ -52,7 +59,7 @@ jobs:
       run: |
         python manage.py migrate
 
-    - name: Run tests
+    - name: Run tests with coverage
       env:
         DATABASE_NAME: postgres
         DATABASE_USER: postgres
@@ -60,4 +67,9 @@ jobs:
         DATABASE_HOST: localhost  
         DATABASE_PORT: 5432
       run: |
-        python manage.py test
+        pytest --cov --cov-report=xml --disable-warnings
+
+    - name: Upload coverage results to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

@@ -77,7 +77,7 @@ coverage.xml
 .cache
 
 # Migrations
-**/migrations/*
+# **/migrations/*
 
 # Pytest cache
 .pytest_cache/
