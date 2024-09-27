@@ -1,52 +1,64 @@
 ![Python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white) ![Django REST Framework](https://img.shields.io/badge/Django%20REST%20Framework-3F729B?style=for-the-badge&logo=django&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) ![Ansible](https://img.shields.io/badge/Ansible-ED4B2A?style=for-the-badge&logo=ansible&logoColor=white)  ![AWS EC2](https://img.shields.io/badge/Amazon%20AWS%20EC2-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white) ![pytest](https://img.shields.io/badge/pytest-000000?style=for-the-badge&logo=pytest&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 
 [![codecov](https://codecov.io/github/Laban254/customer-management-api/graph/badge.svg?token=573LW1DYQJ)](https://codecov.io/github/Laban254/customer-management-api)
-# Django REST API with Google OAuth2 Authentication and SMS Notifications
+# 📱 Django REST API with Google OAuth2 Authentication and SMS Notifications 🚀
 
-A  Django REST API for efficiently managing customers and orders, featuring OpenID Connect authentication, SMS notifications for order updates, comprehensive unit testing, and seamless CI/CD integration.
+A Django REST API for efficiently managing customers and orders, featuring OpenID Connect authentication, SMS notifications for order updates, comprehensive unit testing, and seamless CI/CD integration.
 
-## Table of Contents
+## 📑 Table of Contents
 
--   [Features](#features)
--   [Technologies](#technologies)
--   [Installation](#installation)
--   [Initial Setup](#initial-setup)
--   [Environment Variables](#environment-variables)
--   [CI/CD Configuration](#cicd-configuration)
--   [Usage](#usage)
--   [Running the Application](#running-the-application)
--   [Testing](#testing)
--   [Deployment](#deployment)
--   [License](#license)
+-   🎯 [Features](#features)
+-   🛠️ [Technologies](#technologies)
+-   🗂 [Database Schema](#database-schema)
+-   📦 [Installation](#installation)
+-   📡 [Endpoints](#endpoints)
+-   📊 [Swagger UI](#swagger-ui)
+-   📖 [Usage](#usage)
+-   🧪 [Testing](#testing)
+-   ⚙️ [CI/CD Setup](#cicd-setup)
+-   🔄 [CI/CD Configuration](#cicd-configuration)
+-   🚀 [Deployment](#deployment)
+-   📜 [License](#license)
 
-## Features
+----------
 
--   **Google OAuth2 Login**: Users can authenticate using their Google accounts.
--   **Customer Management**: Easily manage customer records.
--   **Order Management**: Track and manage orders.
--   **SMS Notifications**: Send notifications via SMS when orders are created.
+## 🎯 Features
 
-## Technologies
+-   🔐 **Google OAuth2 Login**: Users can authenticate using their Google accounts.
+-   👥 **Customer Management**: Easily manage customer records.
+-   📦 **Order Management**: Track and manage orders.
+-   📲 **SMS Notifications**:  Send notifications via SMS API *(Africa's Talking)* when orders are created.
 
--   **Framework**: Django
--   **API**: Django REST Framework
--   **Database**: PostgreSQL
--   **Containerization**: Docker
--   **CI/CD**: GitHub Actions
--   **Provisioning**: Ansible
--   **Code Coverage**: Codecov
+----------
 
-## Database Schema
+## 🛠 Technologies
+
+-   **Framework**: Django 🦄
+-   **API**: Django REST Framework ⚙️
+-   **Database**: PostgreSQL 🗄
+-   **Containerization**: Docker 🐳
+-   **CI/CD**: GitHub Actions 🔄
+-   **Provisioning**: Ansible 📜
+-   **Code Coverage**: Codecov 📊
+
+----------
+
+## 🗂 Database Schema
+
+Below is the database schema for the project, showing the relationships between the `User`, `Customer`, and `Order` tables:
+
+🗂 **Database Schema**
 Below is the database schema for the project, showing the relationships between the `User`, `Customer`, and `Order` tables.
 ![Database Schema](./docs/images/db%20schema.png)
 
-## Installation
+----------
+## 📦 Installation
 
 ### Prerequisites
 
--  **Docker**: Ensure that Docker is installed and running on your machine. For installation instructions, visit the [Docker installation guide](https://docs.docker.com/engine/install/).
+-   🐳 **Docker**:  Ensure that Docker is installed and running on your machine. For installation instructions, visit the [Docker installation guide](https://docs.docker.com/engine/install/).
 
-### Steps
+### 📝 Steps
 
 1.  **Clone the Repository**:
     
@@ -86,7 +98,7 @@ Below is the database schema for the project, showing the relationships between 
     
 6.  **Access the Application**: Open your browser and navigate to [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-## Endpoints
+## 📡Endpoints
 
 -   `POST /auth/google/login/` - Initiates the Google OAuth2 login flow.
 -   `GET /auth/google/callback/` - Handles the Google OAuth2 callback and exchanges the authorization code for tokens.
@@ -96,14 +108,14 @@ Below is the database schema for the project, showing the relationships between 
 -   `POST /api/customers/` - Creates a new customer associated with the authenticated user.
 -   `GET /api/orders/` - Retrieves the list of orders associated with the authenticated user.
 -   `POST /api/orders/` - Creates a new order and sends an SMS notification.
-## Swagger UI
+## 📊  Swagger UI
 
 The application provides a Swagger UI for API documentation. You can access it at:
 
 -   **Swagger UI:** http://localhost:8000/swagger-ui/
 -   **ReDoc:** http://localhost:8000/redoc/
 
-## Usage
+## 📖Usage
 
 Follow these steps to se the application:
 
@@ -122,7 +134,7 @@ Follow these steps to se the application:
     -   Enter the access token in the "Value" field and click "Authorize".
 6.  **Using Other Tools**: You can also leverage the access token with tools like Postman to access the secured endpoints.
     
-## Testing
+## 🧪 Testing
 
 Ensure everything works as expected by running the tests defined within your Django application. To execute tests and check code coverage, run:
 
@@ -131,9 +143,10 @@ Ensure everything works as expected by running the tests defined within your Dja
 
 Ensure that your test environment is properly configured and that the database is available.
 
-## CI/CD Setup
+----------
+## ⚙️  CI/CD Setup
 
-### Initial Setup
+#### 🌱 Initial Setup
 
 To configure your AWS EC2 instance, follow these steps:
 
@@ -144,7 +157,7 @@ To configure your AWS EC2 instance, follow these steps:
 2.  **Trigger the Initial Setup Workflow**:
     -   In GitHub Actions, trigger the [**`initial-setup.yml`**](./github/workflows/initial-setup.yml) workflow to automatically configure your EC2 instance.  
 
-### CI/CD Configuration
+#### 🔄  CI/CD Configuration
 
 -   **Continuous Integration (CI)**: Managed through GitHub Actions, this automatically runs tests for every pull request using the [**`ci.yml`**](./github/workflows/ci.yml) workflow to ensure code quality.
     
@@ -170,12 +183,14 @@ To configure your AWS EC2 instance, follow these steps:
 
 
 
-
-## Deployment
+----------
+## 🚀 Deployment
 
 The application is automatically deployed to your server through the  [**`cd.yml`**](./github/workflows/cd.yml) workflow upon pushing changes to the specified branch.
 
-
-## License
+----------
+## 📜 License
 
 This project is licensed under the MIT License.
+
+----------
