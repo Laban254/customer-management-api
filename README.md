@@ -36,6 +36,10 @@ A  Django REST API for efficiently managing customers and orders, featuring Open
 -   **Provisioning**: Ansible
 -   **Code Coverage**: Codecov
 
+## Database Schema
+Below is the database schema for the project, showing the relationships between the `User`, `Customer`, and `Order` tables.
+![Database Schema](./docs/images/db%20schema.png)
+
 ## Installation
 
 ### Prerequisites
