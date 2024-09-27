@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from django.conf import settings
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -186,4 +187,52 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {name} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'DEBUG' if settings.DEBUG else 'INFO',  
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'myAppLogs.log',
+            'maxBytes': 1024 * 1024 * 10,  
+            'backupCount': 5,  
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'] if settings.DEBUG else ['file'],
+            'level': 'DEBUG' if settings.DEBUG else 'INFO',
+            'propagate': True,
+        },
+        'app1': {
+            'handlers': ['console', 'file'] if settings.DEBUG else ['file'],
+            'level': 'DEBUG' if settings.DEBUG else 'INFO',
+            'propagate': True,
+        },
+        'app2': {
+            'handlers': ['console', 'file'] if settings.DEBUG else ['file'],
+            'level': 'DEBUG' if settings.DEBUG else 'INFO',
+            'propagate': True,
+        },
+    },
 }
