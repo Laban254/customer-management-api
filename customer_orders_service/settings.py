@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-ex2@pmn$ot7edgieos$lsou$wzfmai4hlh)0pfrwll4ujxx)_f
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set DEBUG based on the environment variable
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
 # Set ALLOWED_HOSTS
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
@@ -224,12 +223,12 @@ LOGGING = {
             'level': 'DEBUG' if settings.DEBUG else 'INFO',
             'propagate': True,
         },
-        'app1': {
+        'auth': {
             'handlers': ['console', 'file'] if settings.DEBUG else ['file'],
             'level': 'DEBUG' if settings.DEBUG else 'INFO',
             'propagate': True,
         },
-        'app2': {
+        'customer_orders': {
             'handlers': ['console', 'file'] if settings.DEBUG else ['file'],
             'level': 'DEBUG' if settings.DEBUG else 'INFO',
             'propagate': True,
