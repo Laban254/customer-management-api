@@ -1,4 +1,7 @@
+import logging
 from rest_framework import permissions
+
+logger = logging.getLogger('customer_orders')  
 
 class IsOwner(permissions.BasePermission):
     """
@@ -17,4 +20,10 @@ class IsOwner(permissions.BasePermission):
         Returns:
             bool: True if the user is the owner, False otherwise.
         """
-        return obj.user == request.user
+        is_owner = obj.user == request.user
+        if is_owner:
+            logger.info('Access granted to user: %s for object: %s', request.user, obj)
+        else:
+            logger.warning('Access denied to user: %s for object: %s', request.user, obj)
+
+        return is_owner
