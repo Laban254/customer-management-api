@@ -84,8 +84,10 @@ A  Django REST API for efficiently managing customers and orders, featuring Open
 
 ## Endpoints
 
--   `POST /api/google/login/` - Initiates the Google OAuth2 login flow.
--   `GET /api/google/callback/` - Handles the Google OAuth2 callback and exchanges the authorization code for tokens.
+-   `POST /auth/google/login/` - Initiates the Google OAuth2 login flow.
+-   `GET /auth/google/callback/` - Handles the Google OAuth2 callback and exchanges the authorization code for tokens.
+-   `POST /auth/token/refresh/`- Refreshes the access token using the refresh token.
+-   `POST /auth/token/`- Exchanges credentials for a new access token..
 -   `GET /api/customers/` - Retrieves the list of customers associated with the authenticated user.
 -   `POST /api/customers/` - Creates a new customer associated with the authenticated user.
 -   `GET /api/orders/` - Retrieves the list of orders associated with the authenticated user.
@@ -103,7 +105,7 @@ Follow these steps to se the application:
 
 1.  **Initiate Google Login**: 
 	To start the Google login process, open your web browser and navigate to the following URL:
-     `GET /api/google/login/` 
+     `GET /auth/google/login/` 
     This action will redirect you to Google’s authentication page, where you can log in with your Google account.
     
 2.  **Authenticate**: Log in using your Google account. After authentication, you will be redirected to the callback URL with an authorization code.
