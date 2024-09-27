@@ -16,6 +16,7 @@ services:
       - ./staticfiles:/app/staticfiles 
       - /etc/letsencrypt:/etc/letsencrypt
     ports:
-      - "80:80"  
+      - "80:80" 
+      - "443:443" 
     depends_on:
       - web
