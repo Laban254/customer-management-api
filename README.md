@@ -133,7 +133,7 @@ The application provides a Swagger UI for API documentation. You can access it a
 
 ## 📖Usage
 
-Follow these steps to se the application:
+Follow these steps to use the application:
 
 1.  **Initiate Google Login**: 
 	To start the Google login process, open your web browser and navigate to the following URL:
