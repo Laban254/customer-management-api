@@ -23,20 +23,20 @@ def sample_customer(mock_user, db):
     """Fixture to create a sample customer for testing orders."""
     return Customer.objects.create(name="Test Customer", code="123", phone_number="+254796111111", user=mock_user)
 
-@pytest.mark.parametrize("item, amount, customer, expected_status", [
+@pytest.mark.parametrize("item, amount, customer_id, expected_status", [
     ('Test Item', 100, True, status.HTTP_201_CREATED),
     ('', 100, True, status.HTTP_400_BAD_REQUEST),  # Invalid due to missing item
     ('Test Item', None, True, status.HTTP_400_BAD_REQUEST),  
     ('Test Item', 100, False, status.HTTP_400_BAD_REQUEST),  
 ])
 @patch('customer_orders.views.send_sms')  # Mock the send_sms function to prevent real SMS sending
-def test_create_order_for_authenticated_user(mock_send_sms, mock_user, api_request_factory, sample_customer, item, amount, customer, expected_status):
+def test_create_order_for_authenticated_user(mock_send_sms, mock_user, api_request_factory, sample_customer, item, amount, customer_id, expected_status):
     """Test creating an order for authenticated users."""
     url = reverse('order-list-create')
     request_data = {
         'item': item,
         'amount': amount,
-        'customer': sample_customer.id if customer else None, 
+        'customer_id': sample_customer.id if customer_id else None, 
     }
     request = api_request_factory.post(url, request_data, format='json')
 
@@ -75,7 +75,6 @@ def test_get_order_list_authenticated(mock_user, sample_customer, api_request_fa
     
     request = api_request_factory.get(url)
     force_authenticate(request, user=mock_user)
-    print("Sample Customer:", sample_customer)
 
     order = Order.objects.create(item='Test Item', amount=100, customer=sample_customer, user=mock_user)
 
