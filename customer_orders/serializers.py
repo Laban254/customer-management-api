@@ -36,11 +36,12 @@ class CustomerSerializer(serializers.ModelSerializer):
         return customer
 
 class OrderSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')  
+    user = serializers.ReadOnlyField(source='user.username')
+    customer_id = serializers.PrimaryKeyRelatedField(source='customer', queryset=Customer.objects.all())
 
     class Meta:
         model = Order
-        fields = ['id', 'item', 'amount', 'time', 'user', 'customer']
+        fields = ['id', 'item', 'amount', 'time', 'user', 'customer_id']
 
     def create(self, validated_data):
         """
