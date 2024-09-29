@@ -1,9 +1,13 @@
 ![Python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white) ![Django REST Framework](https://img.shields.io/badge/Django%20REST%20Framework-3F729B?style=for-the-badge&logo=django&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) ![Ansible](https://img.shields.io/badge/Ansible-ED4B2A?style=for-the-badge&logo=ansible&logoColor=white)  ![AWS EC2](https://img.shields.io/badge/Amazon%20AWS%20EC2-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white) ![pytest](https://img.shields.io/badge/pytest-000000?style=for-the-badge&logo=pytest&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 
 [![codecov](https://codecov.io/github/Laban254/customer-management-api/graph/badge.svg?token=573LW1DYQJ)](https://codecov.io/github/Laban254/customer-management-api)
+
+----------
 # 📱 Django REST API with Google OAuth2 Authentication and SMS Notifications 🚀
 
 A Django REST API for efficiently managing customers and orders, featuring OpenID Connect authentication, SMS notifications for order updates, comprehensive unit testing, and seamless CI/CD integration.
+
+
 
 ## 📑 Table of Contents
 
@@ -15,6 +19,8 @@ A Django REST API for efficiently managing customers and orders, featuring OpenI
 -   📊 [Swagger UI](#swagger-ui)
 -   📖 [Usage](#usage)
 -   🧪 [Testing](#testing)
+-   📜 [Logging Setup](#logging-setup)
+-   🌐 [Nginx Configuration](#nginx-configuration)
 -   ⚙️ [CI/CD Setup](#cicd-setup)
 -   🔄 [CI/CD Configuration](#cicd-configuration)
 -   🚀 [Deployment](#deployment)
@@ -170,7 +176,7 @@ The Django application is configured to log messages to both the console and a l
 
 Nginx is configured to serve the Django application and handle static files. The Nginx configuration file is located at **nginx/nginx.conf**.
 
-📂 Access logs are stored in **/var/log/nginx/mydjangoapp_access.log**.  
+ 📂 Access logs are stored in **/var/log/nginx/mydjangoapp_access.log**.  
 ⚠️ Error logs are stored in **/var/log/nginx/mydjangoapp_error.log**.
 
 ----------
