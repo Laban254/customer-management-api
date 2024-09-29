@@ -20,6 +20,10 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -211,7 +215,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG' if settings.DEBUG else 'INFO',  
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'myAppLogs.log'),
+            'filename': os.path.join(LOGS_DIR, 'myAppLogs.log'),
             'maxBytes': 1024 * 1024 * 10,  
             'backupCount': 5,  
             'formatter': 'verbose',
