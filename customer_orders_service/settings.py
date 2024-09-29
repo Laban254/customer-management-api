@@ -211,7 +211,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG' if settings.DEBUG else 'INFO',  
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'myAppLogs.log',
+            'filename': os.path.join(BASE_DIR, 'logs', 'myAppLogs.log'),
             'maxBytes': 1024 * 1024 * 10,  
             'backupCount': 5,  
             'formatter': 'verbose',

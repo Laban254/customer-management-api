@@ -4,6 +4,7 @@ services:
     volumes:
       - .:/app
       - ./staticfiles:/app/staticfiles 
+      - ./logs/django:/app/logs
     expose:
       - "8000"  
     env_file:
@@ -15,6 +16,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./staticfiles:/app/staticfiles 
       - /etc/letsencrypt:/etc/letsencrypt
+      - ./logs/nginx:/var/log/nginx 
+      - ./logs/django:/app/logs
     ports:
       - "80:80" 
       - "443:443" 
