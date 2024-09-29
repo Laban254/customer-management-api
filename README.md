@@ -192,13 +192,13 @@ To configure your AWS EC2 instance, follow these steps:
     -   Update the Ansible inventory file located at `ansible/inventory/hosts.ini` with your server's IP address.
     -   Modify the Ansible playbook at `ansible/playbooks/initialSetup.yml` as necessary to suit your configuration.
 2.  **Trigger the Initial Setup Workflow**:
-    -   In GitHub Actions, trigger the [**`initial-setup.yml`**](./github/workflows/initial-setup.yml) workflow to automatically configure your EC2 instance.  
+    -   In GitHub Actions, trigger the [**`initial-setup.yml`**](./.github/workflows/initial-setup.yml) workflow to automatically configure your EC2 instance.  
 
 #### 🔄  CI/CD Configuration
 
--   **Continuous Integration (CI)**: Managed through GitHub Actions, this automatically runs tests for every pull request using the [**`ci.yml`**](./github/workflows/ci.yml) workflow to ensure code quality.
+-   **Continuous Integration (CI)**: Managed through GitHub Actions, this automatically runs tests for every pull request using the [**`ci.yml`**](./.github/workflows/ci.yml) workflow to ensure code quality.
     
--   **Continuous Deployment (CD)**: A separate workflow, [**`cd.yml`**](./github/workflows/cd.yml) is responsible for deploying your application whenever changes are pushed to the specified branch.
+-   **Continuous Deployment (CD)**: A separate workflow, [**`cd.yml`**](./.github/workflows/cd.yml) is responsible for deploying your application whenever changes are pushed to the specified branch.
     
 -   **Repository Secrets**: Set up the following GitHub secrets to enable seamless CI/CD operations: [.env.sample](.env.sample)
     
