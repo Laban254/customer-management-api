@@ -11,9 +11,9 @@ services:
       - .env
 
   nginx:
-    image: nginx:latest
+    image: openresty/openresty:alpine  # OpenResty for Lua support
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
       - ./staticfiles:/app/staticfiles 
       - /etc/letsencrypt:/etc/letsencrypt
       - ./logs/nginx:/var/log/nginx 
