@@ -47,7 +47,9 @@ A Django REST API for efficiently managing customers and orders, featuring OpenI
 
 Below is the database schema for the project, showing the relationships between the `User`, `Customer`, and `Order` tables:
 
+
 🗂 **Database Schema**
+
 Below is the database schema for the project, showing the relationships between the `User`, `Customer`, and `Order` tables.
 ![Database Schema](./docs/images/db%20schema.png)
 
@@ -57,6 +59,8 @@ Below is the database schema for the project, showing the relationships between 
 ### Prerequisites
 
 -   🐳 **Docker**:  Ensure that Docker is installed and running on your machine. For installation instructions, visit the [Docker installation guide](https://docs.docker.com/engine/install/).
+
+----------
 
 ### 📝 Steps
 
@@ -98,9 +102,11 @@ Below is the database schema for the project, showing the relationships between 
     
 6.  **Access the Application**: Open your browser and navigate to [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
+----------
+
 ## 📡Endpoints
 
--   `POST /auth/google/login/` - Initiates the Google OAuth2 login flow.
+-   `GET /auth/google/login/` - Initiates the Google OAuth2 login flow.
 -   `GET /auth/google/callback/` - Handles the Google OAuth2 callback and exchanges the authorization code for tokens.
 -   `POST /auth/token/refresh/`- Refreshes the access token using the refresh token.
 -   `POST /auth/token/`- Exchanges credentials for a new access token..
@@ -108,12 +114,16 @@ Below is the database schema for the project, showing the relationships between 
 -   `POST /api/customers/` - Creates a new customer associated with the authenticated user.
 -   `GET /api/orders/` - Retrieves the list of orders associated with the authenticated user.
 -   `POST /api/orders/` - Creates a new order and sends an SMS notification.
+----------
+
 ## 📊  Swagger UI
 
 The application provides a Swagger UI for API documentation. You can access it at:
 
 -   **Swagger UI:** http://localhost:8000/swagger-ui/
 -   **ReDoc:** http://localhost:8000/redoc/
+
+----------
 
 ## 📖Usage
 
@@ -133,6 +143,8 @@ Follow these steps to se the application:
     -   To use the access token in Swagger UI, locate the endpoints requiring authentication (e.g., **/api/customers/**, **/api/orders/**) and click "Authorize".
     -   Enter the access token in the "Value" field and click "Authorize".
 6.  **Using Other Tools**: You can also leverage the access token with tools like Postman to access the secured endpoints.
+
+----------
     
 ## 🧪 Testing
 
@@ -144,7 +156,26 @@ Ensure everything works as expected by running the tests defined within your Dja
 Ensure that your test environment is properly configured and that the database is available.
 
 ----------
-## ⚙️  CI/CD Setup
+
+### 📜 Logging Setup
+
+The Django application is configured to log messages to both the console and a log file. The logging configuration is defined in the `settings.py` file.
+
+📝 Logs will be written to **myAppLogs.log**, and console logs will be visible in the Docker logs.
+
+----------
+
+
+### 🌐 Nginx Configuration
+
+Nginx is configured to serve the Django application and handle static files. The Nginx configuration file is located at **nginx/nginx.conf**.
+
+📂 Access logs are stored in **/var/log/nginx/mydjangoapp_access.log**.  
+⚠️ Error logs are stored in **/var/log/nginx/mydjangoapp_error.log**.
+
+----------
+
+# ⚙️  CI/CD Setup
 
 #### 🌱 Initial Setup
 
@@ -163,7 +194,7 @@ To configure your AWS EC2 instance, follow these steps:
     
 -   **Continuous Deployment (CD)**: A separate workflow, [**`cd.yml`**](./github/workflows/cd.yml) is responsible for deploying your application whenever changes are pushed to the specified branch.
     
--   **Repository Secrets**: Set up the following GitHub secrets to enable seamless CI/CD operations:
+-   **Repository Secrets**: Set up the following GitHub secrets to enable seamless CI/CD operations: [.env.sample](.env.sample)
     
     -   `AFRICAS_TALKING_API_KEY`
     -   `AFRICAS_TALKING_USERNAME`
